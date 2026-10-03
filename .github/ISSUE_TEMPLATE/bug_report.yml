@@ -1,0 +1,46 @@
+name: Bug report
+description: Report a reproducible problem with BetterWidgets.
+title: "[Bug]: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please use generated sample media and redact private paths, bookmarks, and logs.
+        For vulnerabilities, follow SECURITY.md instead of posting sensitive details here.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Describe the problem and what you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Include the media format and the actions that trigger the issue.
+      placeholder: |
+        1. Add a generated GIF using Add Widget.
+        2. ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: App version or commit
+      placeholder: "1.0 (build 1), or a commit SHA"
+    validations:
+      required: true
+  - type: input
+    id: system
+    attributes:
+      label: macOS version and Mac architecture
+      placeholder: "macOS version; Apple silicon or Intel"
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Additional context
+      description: Optional redacted logs, screenshots, and Xcode version if built from source.

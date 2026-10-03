@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security and privacy reporting
+    url: https://github.com/A0220a/BetterWidgets/blob/main/SECURITY.md
+    about: Read the reporting instructions before disclosing sensitive information.

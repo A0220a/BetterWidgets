@@ -49,7 +49,7 @@ if [[ "$(/usr/libexec/PlistBuddy -c 'Print :com.apple.security.app-sandbox' "$wo
     exit 1
 fi
 strings "$app_dir/Contents/MacOS/BetterWidgets" > "$work_dir/binary-strings.txt"
-if LC_ALL=C /usr/bin/grep -Eq '/Users/|/home/' "$work_dir/binary-strings.txt"; then
+if LC_ALL=C /usr/bin/grep -Eq '/(Users|home)/' "$work_dir/binary-strings.txt"; then
     echo 'Release binary contains a local home-directory path.' >&2
     exit 1
 fi

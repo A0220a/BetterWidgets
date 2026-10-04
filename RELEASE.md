@@ -35,6 +35,8 @@ bash scripts/build-release.sh
 
 The script builds a universal app for Apple silicon and Intel, verifies its signature and architectures, and creates `dist/BetterWidgets-1.0.dmg`, `dist/BetterWidgets-1.0.zip`, checksums, and a release report. The DMG contains the app and an Applications shortcut. By default, the build has an ad-hoc signature and has not been notarized by Apple.
 
+Packaging builds from a temporary source copy to keep the publisher's home-directory paths out of the binary. It disables injected debugging entitlements and checks that the final app retains its sandbox without `get-task-allow` before creating the archives.
+
 ## Public distribution outside the Mac App Store
 
 Install a **Developer ID Application** certificate and create a notarization Keychain profile with `xcrun notarytool store-credentials`. Keep passwords and API keys out of this repository.

@@ -10,7 +10,7 @@
 
 **macOS 14+ · Apple silicon & Intel · SwiftUI + AppKit · Local media**
 
-[Build and run](#build-and-run) · [Privacy](#authentication-and-privacy) · [Distribution](#distribution) · [Contributing](CONTRIBUTING.md) · [Changelog](RELEASE_NOTES.md)
+[Download](https://github.com/A0220a/BetterWidgets/releases) · [Build and run](#build-and-run) · [Privacy](#authentication-and-privacy) · [Distribution](#distribution) · [Contributing](CONTRIBUTING.md) · [Changelog](RELEASE_NOTES.md)
 
 A native macOS menu bar app that puts images, animated GIFs, and looping videos on your desktop. Built with SwiftUI, AppKit, AVFoundation, and ImageIO.
 
@@ -24,6 +24,12 @@ A native macOS menu bar app that puts images, animated GIFs, and looping videos 
 - Launch at login, reopen from the menu bar, and switch between desktop and manager windows.
 
 Supported library formats: PNG, JPEG, HEIC, GIF, MP4, and MOV. Media stays in its original location.
+
+## Download and install
+
+Download the DMG from [GitHub Releases](https://github.com/A0220a/BetterWidgets/releases), open it, and drag BetterWidgets to Applications. Open the app to add media; use its menu bar icon to reopen the manager afterward.
+
+The first download is a **preview build** with an ad-hoc signature. It is **not Developer ID signed or notarized**, so macOS may block its launch. Release notes include the exact build status and SHA-256 checksum. macOS 14 and Intel runtime checks are still pending; see [verification limits](AUDIT.md).
 
 ## Build and run
 

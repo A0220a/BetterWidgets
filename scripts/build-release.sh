@@ -22,15 +22,37 @@ if [[ -n "$notary_profile" && "$sign_identity" == - ]]; then
 fi
 
 mkdir -p "$output_dir"
-xcodebuild -project "$repo_dir/BetterWidgets.xcodeproj" -scheme BetterWidgets \
+# Build from a temporary source copy so compiler-generated strings cannot expose
+# the publisher's home directory. Copy only the project and its shared settings.
+source_dir="$work_dir/source"
+mkdir -p "$source_dir/BetterWidgets.xcodeproj"
+ditto "$repo_dir/BetterWidgets" "$source_dir/BetterWidgets"
+cp "$repo_dir/BetterWidgets.xcodeproj/project.pbxproj" "$source_dir/BetterWidgets.xcodeproj/"
+ditto "$repo_dir/BetterWidgets.xcodeproj/xcshareddata" "$source_dir/BetterWidgets.xcodeproj/xcshareddata"
+xcodebuild -project "$source_dir/BetterWidgets.xcodeproj" -scheme BetterWidgets \
     -configuration Release -derivedDataPath "$work_dir/DerivedData" \
     ARCHS='arm64 x86_64' ONLY_ACTIVE_ARCH=NO \
     CODE_SIGN_IDENTITY="$sign_identity" DEVELOPMENT_TEAM="$sign_team" CODE_SIGNING_ALLOWED=YES \
+    CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO \
     build > "$output_dir/build.log" 2>&1 || {
         tail -n 60 "$output_dir/build.log" >&2
         exit 1
     }
 app_dir="$work_dir/DerivedData/Build/Products/Release/BetterWidgets.app"
+codesign -d --entitlements :- "$app_dir" > "$work_dir/entitlements.plist" 2>/dev/null
+if [[ "$(/usr/libexec/PlistBuddy -c 'Print :com.apple.security.get-task-allow' "$work_dir/entitlements.plist" 2>/dev/null || true)" == true ]]; then
+    echo 'Release app must not allow debugger attachment.' >&2
+    exit 1
+fi
+if [[ "$(/usr/libexec/PlistBuddy -c 'Print :com.apple.security.app-sandbox' "$work_dir/entitlements.plist")" != true ]]; then
+    echo 'Release app must retain its sandbox.' >&2
+    exit 1
+fi
+strings "$app_dir/Contents/MacOS/BetterWidgets" > "$work_dir/binary-strings.txt"
+if LC_ALL=C /usr/bin/grep -Eq '/Users/|/home/' "$work_dir/binary-strings.txt"; then
+    echo 'Release binary contains a local home-directory path.' >&2
+    exit 1
+fi
 info_plist="$app_dir/Contents/Info.plist"
 release_version="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$info_plist")"
 release_build="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$info_plist")"
